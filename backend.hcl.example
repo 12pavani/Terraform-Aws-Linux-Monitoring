@@ -1,0 +1,5 @@
+bucket       = "YOUR-UNIQUE-STATE-BUCKET"
+key          = "tf-aws-linux-demo/terraform.tfstate"
+region       = "ap-south-1"
+encrypt      = true
+use_lockfile = true
