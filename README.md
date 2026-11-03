@@ -320,9 +320,9 @@ You should see your account number and user name. If you see an error, the keys 
 
 <pre>
 terraform-aws-linux-monitoring/
-|-- README.md                      This file (Part 1: concepts and setup)
+|-- README.md                      concepts and setup
 |-- docs/
-|   `-- DEPLOYMENT_GUIDE.md        Part 2: step-by-step deploy, verify, troubleshoot, clean up
+|   `-- DEPLOYMENT_GUIDE.md        step-by-step deploy, verify, troubleshoot, clean up
 |-- versions.tf                    Terraform and provider versions, AWS region setup, default tags
 |-- backend.tf                     Tells Terraform to keep its state file in S3
 |-- variables.tf                   The settings you can change (region, instance size, email, ...)
@@ -364,8 +364,6 @@ terraform apply
 terraform output website_url
 terraform destroy                             # when you are done</code></pre>
 
-<p>Everyone else should follow the detailed guide in Part 2.</p>
-
 <h2 id="cost-and-safety">11. Cost and safety</h2>
 
 <ul>
@@ -382,18 +380,10 @@ terraform destroy                             # when you are done</code></pre>
 You now know what the project is, what it needs, and how to prepare your computer and AWS account.
 </p>
 
-<p>
-Continue with <b><a href="docs/DEPLOYMENT_GUIDE.md">docs/DEPLOYMENT_GUIDE.md</a></b> (Part 2). It walks through creating the state bucket, deploying, opening the website, logging in with SSM, testing the alarm, using the GitHub Actions pipeline, fixing common errors, and cleaning up.
-</p>
-
-<h1 align="center">Deployment Guide (Part 2)</h1>
+<h1 align="center">Deployment Guide </h1>
 
 <p align="center">
 Step-by-step instructions to deploy, test, publish and clean up the Terraform AWS Linux Server project.
-</p>
-
-<p>
-This is Part 2. Part 1 is the <a href="../README.md">main README</a>, which explains what the project is and how to install the tools and set up AWS. Finish Part 1 first. You should be able to run <code>terraform version</code> (1.10 or newer) and <code>aws sts get-caller-identity</code> successfully before you begin.
 </p>
 
 <h2>Contents</h2>
@@ -616,7 +606,7 @@ Open it in a browser. Use <code>http://</code>, not <code>https://</code>, becau
 There is no SSH key and no open SSH port. You connect through AWS Systems Manager Session Manager instead. Use whichever way is easier for you.
 </p>
 
-<p><b>Option A: from your terminal</b> (needs the Session Manager plugin from Part 1)</p>
+<p><b>Option A: from your terminal</b> (needs the Session Manager plugin)</p>
 
 <pre><code>aws ssm start-session --target $(terraform output -raw instance_id) --region ap-south-1</code></pre>
 
@@ -1012,7 +1002,3 @@ For a public demo page, yes. For a real application, put a load balancer or CDN 
 </ul>
 
 <hr>
-
-<p align="center">
-Back to <a href="../README.md">Part 1: concepts and setup</a>
-</p>
