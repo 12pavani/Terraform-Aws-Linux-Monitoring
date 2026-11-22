@@ -48,11 +48,7 @@ This project does the same thing with <b>code</b>. The files ending in <code>.tf
   <li>A <b>CI pipeline</b> (GitHub Actions) that automatically checks the Terraform code on every pull request.</li>
 </ul>
 
-<h2 id="who-is-this-for">2. Who is this for and what will you learn?</h2>
-
-<p>
-<b>For:</b> students, interns, and junior engineers who want a small but realistic DevOps project. No prior AWS or Terraform knowledge is needed. You should be comfortable typing commands in a terminal.
-</p>
+<h2 id="who-is-this-for">2. what will you learn?</h2>
 
 <p><b>You will learn:</b></p>
 
