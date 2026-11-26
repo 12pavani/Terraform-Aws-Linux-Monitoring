@@ -448,10 +448,16 @@ cd YOUR_REPO</code></pre>
 
 <p>If it prints file names, it fixed their spacing. If it prints nothing, everything was already formatted. Both are fine.</p>
 
-<h2 id="step-3">Step 3: Create the state bucket</h2>
+<h2 id="step-3">Step 3: Set up Terraform state storage</h2>
 
 <p>
-Terraform needs a safe place to store its state file. The helper script creates an S3 bucket with versioning (so you can recover old state), encryption, and public access blocked.
+Terraform keeps track of what it has created in a <b>state file</b>. You can store it in an S3 bucket (recommended, with versioning and encryption) or locally on your computer. Try Option A first. If your AWS account blocks S3 bucket creation, use Option B.
+</p>
+
+<h3>Option A: Remote state in S3 (recommended)</h3>
+
+<p>
+The helper script creates an S3 bucket with versioning (so you can recover old state), encryption, and public access blocked.
 </p>
 
 <p>
@@ -470,8 +476,47 @@ Next: copy backend.hcl.example to backend.hcl and set bucket = "yourname-tfstate
 <ul>
   <li>If you see <code>Permission denied</code>, run it as <code>bash bootstrap/create_state_bucket.sh yourname-tfstate-12345 ap-south-1</code>.</li>
   <li>If you see <code>BucketAlreadyExists</code>, the name is taken. Choose another.</li>
+  <li>If you see <code>AccessDenied ... explicit deny in a service control policy</code>, your account is blocked from creating S3 buckets by an AWS Organizations policy (common on free-plan or sandbox accounts). This cannot be fixed with IAM permissions. Use Option B below.</li>
   <li>On Windows, run this from Git Bash or WSL, not from PowerShell.</li>
 </ul>
+
+<h3>Option B: Local state (no S3 needed)</h3>
+
+<p>
+Use this if Option A fails with the SCP error. State is stored in <code>terraform.tfstate</code> in the project folder. It works fine for learning and solo projects, but has no locking and no sharing with teammates.
+</p>
+
+<ol>
+  <li>Skip the bucket script and do <b>not</b> create <code>backend.hcl</code>.</li>
+  <li>Find the S3 backend block:
+    <pre><code>grep -rn 'backend "s3"' *.tf</code></pre>
+  </li>
+  <li>Comment it out, keeping the rest of the <code>terraform {}</code> block:
+    <pre><code>terraform {
+  # backend "s3" {}
+  required_providers { ... }
+}</code></pre>
+  </li>
+  <li>Initialize without a backend config:
+    <pre><code>terraform init</code></pre>
+    Use this instead of any <code>terraform init -backend-config=backend.hcl</code> command shown later in the guide.
+  </li>
+  <li>Keep state out of git by adding this to <code>.gitignore</code>:
+    <pre><code>*.tfstate
+*.tfstate.*
+.terraform/
+backend.hcl</code></pre>
+  </li>
+</ol>
+
+<p>
+<b>Important:</b> if you delete <code>terraform.tfstate</code>, Terraform forgets what it created. Back it up before experimenting.
+</p>
+
+<p>
+<b>Moving to S3 later:</b> once you have an account that allows S3, create the bucket with Option A, restore the <code>backend "s3" {}</code> block, then run
+<code>terraform init -backend-config=backend.hcl -migrate-state</code> to move your existing state into the bucket.
+</p>
 
 <h2 id="step-4">Step 4: Create your settings files</h2>
 
