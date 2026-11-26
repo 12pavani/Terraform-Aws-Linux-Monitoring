@@ -4,10 +4,6 @@
 A Infrastructure as Code (IaC) project. With a few commands, Terraform builds a small, monitored Linux web server on Amazon Web Services (AWS), and one more command removes everything again.
 </p>
 
-<p>
-If you have never used AWS or Terraform before, start at the top and read in order. Every term is explained in plain words.
-</p>
-
 <h2>Contents</h2>
 
 <ol>
