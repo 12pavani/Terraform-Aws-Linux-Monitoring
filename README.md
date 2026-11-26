@@ -1,7 +1,7 @@
 <h1 align="center">Terraform AWS Linux Server with Monitoring</h1>
 
 <p align="center">
-A beginner-friendly Infrastructure as Code (IaC) project. With a few commands, Terraform builds a small, monitored Linux web server on Amazon Web Services (AWS), and one more command removes everything again.
+A Infrastructure as Code (IaC) project. With a few commands, Terraform builds a small, monitored Linux web server on Amazon Web Services (AWS), and one more command removes everything again.
 </p>
 
 <p>
