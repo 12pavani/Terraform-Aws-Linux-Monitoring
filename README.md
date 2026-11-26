@@ -486,27 +486,26 @@ Next: copy backend.hcl.example to backend.hcl and set bucket = "yourname-tfstate
 Use this if Option A fails with the SCP error. State is stored in <code>terraform.tfstate</code> in the project folder. It works fine for learning and solo projects, but has no locking and no sharing with teammates.
 </p>
 
+<p><b>Steps:</b></p>
+
 <ol>
-  <li>Skip the bucket script and do <b>not</b> create <code>backend.hcl</code>.</li>
-  <li>Find the S3 backend block:
-    <pre><code>grep -rn 'backend "s3"' *.tf</code></pre>
+  <li><b>Do not</b> run <code>create_state_bucket.sh</code> and do <b>not</b> create <code>backend.hcl</code>.</li>
+  <li>Disable the S3 backend by renaming <code>backend.tf</code>. Terraform ignores files that do not end in <code>.tf</code>:
+    <pre><code>mv backend.tf backend.tf.disabled</code></pre>
   </li>
-  <li>Comment it out, keeping the rest of the <code>terraform {}</code> block:
-    <pre><code>terraform {
-  # backend "s3" {}
-  required_providers { ... }
-}</code></pre>
-  </li>
-  <li>Initialize without a backend config:
+  <li>Initialize Terraform with <b>no</b> backend config:
     <pre><code>terraform init</code></pre>
-    Use this instead of any <code>terraform init -backend-config=backend.hcl</code> command shown later in the guide.
+    If you already ran <code>terraform init</code> earlier with S3 configured, use this instead:
+    <pre><code>terraform init -reconfigure</code></pre>
   </li>
+  <li>Wherever a later step says <code>terraform init -backend-config=backend.hcl</code>, use plain <code>terraform init</code> instead.</li>
   <li>Keep state out of git by adding this to <code>.gitignore</code>:
     <pre><code>*.tfstate
 *.tfstate.*
 .terraform/
 backend.hcl</code></pre>
   </li>
+  <li>Continue with the remaining steps (<code>terraform plan</code>, <code>terraform apply</code>) as written. Your state will be saved in <code>terraform.tfstate</code>.</li>
 </ol>
 
 <p>
@@ -514,9 +513,23 @@ backend.hcl</code></pre>
 </p>
 
 <p>
-<b>Moving to S3 later:</b> once you have an account that allows S3, create the bucket with Option A, restore the <code>backend "s3" {}</code> block, then run
-<code>terraform init -backend-config=backend.hcl -migrate-state</code> to move your existing state into the bucket.
+<b>Note:</b> if <code>terraform apply</code> later fails with another "explicit deny in a service control policy" error, that AWS service is blocked on your account too. The fix is a standalone AWS account, not a code change.
 </p>
+
+<h3>Moving to S3 later</h3>
+
+<p>Once you have an AWS account that allows S3:</p>
+
+<ol>
+  <li>Create the bucket with Option A.</li>
+  <li>Copy <code>backend.hcl.example</code> to <code>backend.hcl</code> and set <code>bucket = "yourname-tfstate-12345"</code>.</li>
+  <li>Restore the backend file:
+    <pre><code>mv backend.tf.disabled backend.tf</code></pre>
+  </li>
+  <li>Migrate your existing local state into the bucket:
+    <pre><code>terraform init -backend-config=backend.hcl -migrate-state</code></pre>
+  </li>
+</ol>
 
 <h2 id="step-4">Step 4: Create your settings files</h2>
 
