@@ -384,7 +384,7 @@ Step-by-step instructions to deploy, test, publish and clean up the Terraform AW
   <li><a href="#overview">Overview of the steps</a></li>
   <li><a href="#step-1">Step 1: Get the project and open it in a terminal</a></li>
   <li><a href="#step-2">Step 2: Format the code</a></li>
-  <li><a href="#step-3">Step 3: Create the state bucket</a></li>
+  <li><a href="#step-3">Step 3: Set up Terraform state storage</a></li>
   <li><a href="#step-4">Step 4: Create your settings files</a></li>
   <li><a href="#step-5">Step 5: Initialise Terraform</a></li>
   <li><a href="#step-6">Step 6: Plan</a></li>
