@@ -535,31 +535,54 @@ backend.hcl</code></pre>
 
 <p>Two files hold your personal values. Both are ignored by Git, so they are never published.</p>
 
+<p><b>Which files do I need?</b></p>
+<ul>
+  <li><b>Remote state in S3 (Step 3, Option A):</b> do 4.1 and 4.2.</li>
+  <li><b>Local state (Step 3, Option B):</b> skip 4.1 and do only 4.2.</li>
+</ul>
+
 <h3>4.1 backend.hcl (where the state is stored)</h3>
 
-<pre><code>cp backend.hcl.example backend.hcl</code></pre>
+<p><b>Only for Option A (S3).</b> If you used Option B (local state), skip to 4.2.</p>
 
-<p>Open <code>backend.hcl</code> in your editor and set your bucket name and region:</p>
-
-<pre><code>bucket       = "yourname-tfstate-12345"
+<ol>
+  <li>Copy the example file:
+    <pre><code>cp backend.hcl.example backend.hcl</code></pre>
+  </li>
+  <li>Open <code>backend.hcl</code> in your editor and set your bucket name and region:
+    <pre><code>bucket       = "yourname-tfstate-12345"
 key          = "tf-aws-linux-demo/terraform.tfstate"
 region       = "ap-south-1"
 encrypt      = true
 use_lockfile = true</code></pre>
+  </li>
+  <li>The region in <code>backend.hcl</code> must match the bucket's region from Step 3.</li>
+</ol>
 
 <h3>4.2 terraform.tfvars (what to build)</h3>
 
-<pre><code>cp terraform.tfvars.example terraform.tfvars</code></pre>
+<p><b>Required for both options.</b></p>
 
-<p>Open <code>terraform.tfvars</code> and set <b>your real email</b>. This is where alarm emails go:</p>
-
-<pre><code>aws_region          = "ap-south-1"
+<ol>
+  <li>Copy the example file:
+    <pre><code>cp terraform.tfvars.example terraform.tfvars</code></pre>
+  </li>
+  <li>Open <code>terraform.tfvars</code> and set <b>your real email</b>. This is where alarm emails go:
+    <pre><code>aws_region          = "ap-south-1"
 project_name        = "tf-aws-linux-demo"
 alert_email         = "you@example.com"
 instance_type       = "t3.micro"
 cpu_alarm_threshold = 70</code></pre>
+  </li>
+  <li>The region here is where the server is built. It can be the same as the bucket's region, but it does not have to be.</li>
+</ol>
 
-<p>The region in <code>backend.hcl</code> must match the bucket's region from Step 3. The region in <code>terraform.tfvars</code> is where the server is built, and it can be the same.</p>
+<p><b>Notes:</b></p>
+<ul>
+  <li>After <code>terraform apply</code>, AWS emails <code>alert_email</code> a subscription confirmation. Click <b>Confirm subscription</b> or no alarm emails will arrive.</li>
+  <li>If <code>apply</code> fails with an instance type error, change <code>instance_type</code> to <code>t2.micro</code> or another type marked "Free tier eligible" in the EC2 console for your region.</li>
+  <li>Using local state? Later steps that say <code>terraform init -backend-config=backend.hcl</code> should be plain <code>terraform init</code>.</li>
+</ul>
 
 <h2 id="step-5">Step 5: Initialise Terraform</h2>
 
