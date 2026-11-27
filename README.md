@@ -685,9 +685,15 @@ git push</code></pre>
 
 <h2 id="step-5">Step 5: Initialise Terraform</h2>
 
+<p><b>Remote state in S3 (Step 3, Option A):</b></p>
 <pre><code>terraform init -backend-config=backend.hcl</code></pre>
+<p>This downloads the AWS provider plugin and connects Terraform to your S3 state bucket.</p>
 
-<p>This downloads the AWS provider plugin and connects Terraform to your S3 state bucket. A successful run ends with:</p>
+<p><b>Local state (Step 3, Option B):</b></p>
+<pre><code>terraform init</code></pre>
+<p>This downloads the AWS provider plugin and keeps state in a local <code>terraform.tfstate</code> file. If you ran <code>terraform init</code> before with the S3 backend active, use <code>terraform init -reconfigure</code> instead.</p>
+
+<p>A successful run ends with:</p>
 
 <pre>
 Terraform has been successfully initialized!
