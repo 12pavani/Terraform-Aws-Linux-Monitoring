@@ -1,10 +1,18 @@
-# Terraform
+# Terraform working files
 .terraform/
 *.tfstate
 *.tfstate.*
 *.tfplan
 crash.log
+.terraform.tfstate.lock.info
 
-# Local, environment-specific values
+# Personal settings (never publish)
 terraform.tfvars
+*.auto.tfvars
 backend.hcl
+
+# Local workaround for accounts without S3 (Step 3, Option B)
+backend.tf.disabled
+
+# macOS
+.DS_Store
